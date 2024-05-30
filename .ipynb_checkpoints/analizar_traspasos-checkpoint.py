@@ -226,5 +226,5 @@ def analizar_traspasos():
     sht.range("status").value = 'Proceso terminado'
 
 if __name__ == "__main__":
-    xw.Book("escenarios_traspasos.xlsx").set_mock_caller()
+    xw.Book("escenarios_traspasos.xlsm").set_mock_caller()
     analizar_traspasos()
