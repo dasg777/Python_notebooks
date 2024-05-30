@@ -82,7 +82,7 @@ def analizar_traspasos():
         return puntuacion, costo_unitario, clasificacion
 
     def satisfacer_deficit(deficit_row):
-
+   
         sucursal_destino = deficit_row['sucursal']
         producto = deficit_row['producto']
         unidades_necesarias = deficit_row['unidades_necesarias']
@@ -106,55 +106,59 @@ def analizar_traspasos():
         for s_origen, _, costo_unitario, clasificacion in puntuaciones:
             if unidades_necesarias <= 0:
                 break
-            # print(f"Evaluando s_origen: {s_origen}, producto: {producto}, clasificacion: {clasificacion}")
+            print(f"Evaluando s_origen: {s_origen}, producto: {producto}, clasificacion: {clasificacion}")
 
-            # Guardar el % del excedente máximo a usar cuando la clasificación es 'A' o 'B'
+            # Guardar el 80% del excedente inicial si la clasificación es 'A' o 'B'
             if clasificacion in ['A', 'B']:
                 excedente_inicial = inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'excedente_ajustado'].values[0]
                 limite_excedente = int(excedente_inicial * max_exced_permitido_AB)
-                # print(f"Límite de excedente para 'A' o 'B': {limite_excedente}")
             else:
                 limite_excedente = None
+
+            # Calcular el límite de inventario ajustado solo una vez para clasificación 'C'
+            if clasificacion == 'C':
+                inventario_ajustado_inicial = inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'].values[0]
+                limite_inventario_ajustado = int(inventario_ajustado_inicial * max_inv_disp_C)
+            else:
+                limite_inventario_ajustado = None
 
             while unidades_necesarias > 0:
                 excedente = inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'excedente_ajustado'].values[0]
                 inventario_ajustado = inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'].values[0]
-                # print(f"Excedente: {excedente}, Inventario ajustado: {inventario_ajustado}, Unidades necesarias: {unidades_necesarias}")
+                print(f"Excedente: {excedente}, Inventario ajustado: {inventario_ajustado}, Unidades necesarias: {unidades_necesarias}")
 
                 if excedente > 0:
                     if clasificacion in ['A', 'B']:
                         unidades_traspaso = min(limite_excedente, unidades_necesarias)
                     else:
                         unidades_traspaso = min(excedente, unidades_necesarias)
-                    # print(f"Unidades traspaso (excedente): {unidades_traspaso}")
                     traspasos.append((s_origen, sucursal_destino, producto, unidades_traspaso, costo_unitario))
                     inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'excedente_ajustado'] -= unidades_traspaso
                     inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'] -= unidades_traspaso
                     unidades_necesarias -= unidades_traspaso
                     unidades_totales_traspasadas += unidades_traspaso
-                    # Reducir el límite del excedente por las unidades que se han traspasado
                     if clasificacion in ['A', 'B']:
                         limite_excedente -= unidades_traspaso
                 elif inventario_ajustado > 0:
                     if clasificacion == 'L':
                         unidades_traspaso = min(inventario_ajustado, unidades_necesarias)
                     elif clasificacion == 'C':
-                        unidades_traspaso = min(int(inventario_ajustado * max_inv_disp_C), unidades_necesarias)
+                        unidades_traspaso = min(limite_inventario_ajustado, unidades_necesarias)
                     else:
                         break
-                    # print(f"Unidades traspaso (inventario ajustado): {unidades_traspaso}")
+                    print(f"Unidades traspaso (inventario ajustado): {unidades_traspaso}")
                     if unidades_traspaso > 0:
                         traspasos.append((s_origen, sucursal_destino, producto, unidades_traspaso, costo_unitario))
                         inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'] -= unidades_traspaso
                         unidades_necesarias -= unidades_traspaso
                         unidades_totales_traspasadas += unidades_traspaso
+                        if clasificacion == 'C':
+                            limite_inventario_ajustado -= unidades_traspaso
                     else:
                         break
                 else:
                     break
-                # Añadir una condición de escape para evitar bucles infinitos
                 if unidades_traspaso == 0:
-                    # print("No se pueden transferir más unidades, saliendo del bucle.")
                     break
 
         deficit_residual = deficit_row['unidades_necesarias'] - unidades_totales_traspasadas
