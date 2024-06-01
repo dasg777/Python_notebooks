@@ -170,7 +170,8 @@ def analizar_traspasos():
 
     total_deficits = len(deficit_df)
 
-    for idx, row in deficit_df.iterrows():
+    for idx in range(total_deficits):
+        row = deficit_df.iloc[idx]
         # Actualizar el progreso en Excel
         progress = f'{idx + 1} de {total_deficits}'
         sht.range("status").value = progress
@@ -179,7 +180,7 @@ def analizar_traspasos():
         todos_traspasos.extend(traspasos)
         if deficit_residual > 0:
             deficits_residuales.append((row['sucursal'], row['producto'], deficit_residual))
-
+    
     # Crear el DataFrame con los traspasos realizados
     traspasos_df = pd.DataFrame(todos_traspasos, columns=['sucursal_origen', 'sucursal_destino', 'producto', 'unidades_traspaso', 'costo_unitario'])
     traspasos_df = traspasos_df[traspasos_df['unidades_traspaso'] != 0]

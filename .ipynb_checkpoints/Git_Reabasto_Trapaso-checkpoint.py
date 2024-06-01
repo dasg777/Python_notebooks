@@ -14,17 +14,16 @@ def download_and_run_github_script():
         if response.status_code == 200:
             with open(local_path, 'wb') as file:
                 file.write(response.content)
-            # print("Archivo descargado exitosamente.")
+            print("Archivo descargado exitosamente.")
             
             # Ejecutar el archivo descargado
             os.system(f'python {local_path}')
         else:
-            # print(f"Error al descargar el archivo: {response.status_code}")
+            print(f"Error al descargar el archivo: {response.status_code}")
     finally:
         # Eliminar el archivo descargado
         if os.path.exists(local_path):
             os.remove(local_path)
-            # print("Archivo eliminado después de la ejecución.")
-
+            print("Archivo eliminado después de la ejecución.")
 if __name__ == "__main__":
     download_and_run_github_script()
