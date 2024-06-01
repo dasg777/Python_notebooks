@@ -168,7 +168,13 @@ def analizar_traspasos():
     todos_traspasos = []
     deficits_residuales = []
 
+    total_deficits = len(deficit_df)
+
     for idx, row in deficit_df.iterrows():
+        # Actualizar el progreso en Excel
+        progress = f'{idx + 1} de {total_deficits}'
+        sht.range("status").value = progress
+
         traspasos, deficit_residual = satisfacer_deficit(row)
         todos_traspasos.extend(traspasos)
         if deficit_residual > 0:
