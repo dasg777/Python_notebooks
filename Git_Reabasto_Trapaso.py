@@ -36,11 +36,13 @@ import requests
 import os
 import logging
 
-# Configurar logging
-logging.basicConfig(filename='logfile.log', level=logging.DEBUG, 
-                    format='%(asctime)s:%(levelname)s:%(message)s')
 
 def download_and_run_github_script():
+    
+    # Configurar logging
+    logging.basicConfig(filename='logfile.log', level=logging.DEBUG, 
+    format='%(asctime)s:%(levelname)s:%(message)s')
+
     # URL del archivo en GitHub
     github_url = "https://raw.githubusercontent.com/dasg777/Python_notebooks/main/analizar_traspasos.py"
     logging.debug(f"URL del archivo en GitHub: {github_url}")
@@ -50,7 +52,7 @@ def download_and_run_github_script():
     logging.debug(f"Nombre del usuario de Windows: {user_name}")
 
     # Ruta local donde se guardará el archivo temporal descargado
-    local_path = f'C:\\Users\\{user_name}\\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\\Documents\\Analisis_Traspasos\\archivo.py'
+    local_path = f'C:\\Users\\{user_name}\\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\\Documentos\\Analisis_Traspasos\\archivo.py'
     logging.debug(f"Ruta local para guardar el archivo: {local_path}")
 
     try:
