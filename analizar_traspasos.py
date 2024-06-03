@@ -245,8 +245,7 @@ if __name__ == "__main__":
 # import numpy as np
 # import os
 # import logging
-
-
+# test change
 # # Construir la ruta al escritorio
 # desktop_path = r'C:\Users\diego.salinas\Desktop\logfile_analizar_traspasos.log'
 
