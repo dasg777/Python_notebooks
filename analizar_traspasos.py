@@ -261,7 +261,7 @@ def analizar_traspasos():
     logging.debug(f"Nombre del usuario de Windows: {user_name}")
 
     # Construir la ruta completa al archivo de Excel
-    file_path = f'C:\\Users\\{user_name}\\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\\Documentos\\Analisis_Traspasos\\escenarios_traspasos.xlsm'
+    file_path = f'C:\\Users\\{user_name}\\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\\Documents\\Analisis_Traspasos\\escenarios_traspasos.xlsm'
     logging.debug(f"Ruta al archivo de Excel: {file_path}")
 
     # Lee el libro de Excel

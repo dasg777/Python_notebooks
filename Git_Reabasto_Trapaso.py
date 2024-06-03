@@ -52,7 +52,7 @@ def download_and_run_github_script():
     logging.debug(f"Nombre del usuario de Windows: {user_name}")
 
     # Ruta local donde se guardará el archivo temporal descargado
-    local_path = f'C:\\Users\\{user_name}\\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\\Documentos\\Analisis_Traspasos\\archivo.py'
+    local_path = f'C:\\Users\\{user_name}\\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\\Documents\\Analisis_Traspasos\\archivo.py'
     logging.debug(f"Ruta local para guardar el archivo: {local_path}")
 
     try:
