@@ -36,13 +36,11 @@ import requests
 import os
 import logging
 
+# Configurar logging
+logging.basicConfig(filename='logfile.log', level=logging.DEBUG, 
+                    format='%(asctime)s:%(levelname)s:%(message)s')
 
 def download_and_run_github_script():
-    
-    # Configurar logging
-    logging.basicConfig(filename='logfile.log', level=logging.DEBUG, 
-    format='%(asctime)s:%(levelname)s:%(message)s')
-
     # URL del archivo en GitHub
     github_url = "https://raw.githubusercontent.com/dasg777/Python_notebooks/main/analizar_traspasos.py"
     logging.debug(f"URL del archivo en GitHub: {github_url}")
