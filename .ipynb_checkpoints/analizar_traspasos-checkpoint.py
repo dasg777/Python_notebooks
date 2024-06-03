@@ -249,8 +249,12 @@ import numpy as np
 import os
 import logging
 
+
+# Construir la ruta al escritorio
+desktop_path = r'C:\Users\diego.salinas\Desktop\logfile_analizar_traspasos.log'
+
 # Configurar logging
-logging.basicConfig(filename='logfile_analizar_traspasos.log', level=logging.DEBUG, 
+logging.basicConfig(filename=desktop_path, level=logging.DEBUG, 
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 def analizar_traspasos():
