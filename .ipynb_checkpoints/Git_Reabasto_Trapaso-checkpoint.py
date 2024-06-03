@@ -2,14 +2,11 @@ import requests
 import os
 
 def download_and_run_github_script():
-    # URL del archivo en GitHub
+      # URL del archivo en GitHub
     github_url = "https://raw.githubusercontent.com/dasg777/Python_notebooks/main/analizar_traspasos.py"
     
-    # Obtener el nombre del usuario de Windows
-    user_name = os.getlogin()
-
-    # Ruta local donde se guardará el archivo temporal descargado
-    local_path = f'C:\\Users\\{user_name}\\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\\Documents\\Analisis_Traspasos\\archivo.py'
+    # Ruta local donde se guardará el archivo descargado
+    local_path = r"C:\Temp\archivo.py"
     
     try:
         # Descargar el archivo de GitHub
