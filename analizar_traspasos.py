@@ -293,6 +293,10 @@ def analizar_traspasos():
     inventario_df['inventario_ajustado'] = inventario_df['inventario_disponible']
     inventario_df['excedente_ajustado'] = inventario_df['excedente']
 
+    # Guardar valores originales para los límites
+    inventario_df['excedente_inicial'] = inventario_df['excedente']
+    inventario_df['inventario_ajustado_inicial'] = inventario_df['inventario_ajustado']
+
     # Normalización de valores
     prioridad_max = prioridades_df['prioridad'].max()  
     clasificacion_dict = {'A': 1, 'B': 2, 'C': 3, 'L': 4}
@@ -350,10 +354,6 @@ def analizar_traspasos():
         # Realizar traspasos hasta satisfacer el déficit
         traspasos = []
         unidades_totales_traspasadas = 0
-
-        # Guardar valores originales
-        inventario_df['excedente_inicial'] = inventario_df['excedente_ajustado']
-        inventario_df['inventario_ajustado_inicial'] = inventario_df['inventario_ajustado']
 
         for s_origen, _, costo_unitario, clasificacion in puntuaciones:
             if unidades_necesarias <= 0:
@@ -426,10 +426,6 @@ def analizar_traspasos():
         if deficit_residual > 0:
             deficits_residuales.append((row['sucursal'], row['producto'], deficit_residual))
     
-    # Crear el DataFrame con los traspasos realizados
-    traspasos_df = pd.DataFrame(todos_traspasos, columns=['sucursal_origen', 'sucursal_destino', 'producto', 'unidades_traspaso', 'costo_unitario'])
-    traspasos_df = traspasos_df[traspasos_df['unidades_traspaso'] != 0]
-
     # Crear el DataFrame con los traspasos realizados
     traspasos_df = pd.DataFrame(todos_traspasos, columns=['sucursal_origen', 'sucursal_destino', 'producto', 'unidades_traspaso', 'costo_unitario'])
     traspasos_df = traspasos_df[traspasos_df['unidades_traspaso'] != 0]
