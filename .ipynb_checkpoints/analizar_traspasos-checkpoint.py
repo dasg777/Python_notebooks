@@ -289,13 +289,19 @@ def analizar_traspasos():
     # Filtrar matriz de traspasos, según kms máximos y elegibilidad
     prioridades_df = prioridades_df[(prioridades_df['prioridad'] <= kms_maximos_distancia) & (prioridades_df['elegible'] == 1)]
 
-    # Ajustar el inventario disponible para reflejar la relación con el excedente
-    inventario_df['inventario_ajustado'] = inventario_df['inventario_disponible']
-    inventario_df['excedente_ajustado'] = inventario_df['excedente']
+    # Ajustar los valores de inventario disponible y excedente según los porcentajes permitidos
+    def ajustar_inventario(row):
+        clasificacion = row['clasificacion']
+        if clasificacion in ['A', 'B']:
+            row['excedente_ajustado'] = row['excedente'] * max_exced_permitido_AB
+        elif clasificacion == 'C':
+            row['inventario_ajustado'] = (row['inventario_disponible'] - row['excedente']) * max_inv_disp_C + row['excedente']
+        return row
 
-    # Guardar valores originales para los límites
-    inventario_df['excedente_inicial'] = inventario_df['excedente']
-    inventario_df['inventario_ajustado_inicial'] = inventario_df['inventario_ajustado']
+    inventario_df['excedente_ajustado'] = inventario_df['excedente']
+    inventario_df['inventario_ajustado'] = inventario_df['inventario_disponible']
+
+    inventario_df = inventario_df.apply(ajustar_inventario, axis=1)
 
     # Normalización de valores
     prioridad_max = prioridades_df['prioridad'].max()  
@@ -358,51 +364,27 @@ def analizar_traspasos():
         for s_origen, _, costo_unitario, clasificacion in puntuaciones:
             if unidades_necesarias <= 0:
                 break
-            # Obtener límites sobre valores originales
-            if clasificacion in ['A', 'B']:
-                limite_excedente = int(inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'excedente_inicial'].values[0] * max_exced_permitido_AB)
-            else:
-                limite_excedente = None
-
-            if clasificacion == 'C':
-                limite_inventario_ajustado = int(inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado_inicial'].values[0] * max_inv_disp_C)
-            else:
-                limite_inventario_ajustado = None
 
             while unidades_necesarias > 0:
                 excedente = inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'excedente_ajustado'].values[0]
                 inventario_ajustado = inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'].values[0]
 
                 if excedente > 0:
-                    if clasificacion in ['A', 'B']:
-                        unidades_traspaso = min(limite_excedente, unidades_necesarias)
-                    else:
-                        unidades_traspaso = min(excedente, unidades_necesarias)
+                    unidades_traspaso = min(excedente, unidades_necesarias)
                     traspasos.append((s_origen, sucursal_destino, producto, unidades_traspaso, costo_unitario))
                     inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'excedente_ajustado'] -= unidades_traspaso
                     inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'] -= unidades_traspaso
                     unidades_necesarias -= unidades_traspaso
                     unidades_totales_traspasadas += unidades_traspaso
-                    if clasificacion in ['A', 'B']:
-                        limite_excedente -= unidades_traspaso
                 elif inventario_ajustado > 0:
-                    if clasificacion == 'L':
-                        unidades_traspaso = min(inventario_ajustado, unidades_necesarias)
-                    elif clasificacion == 'C':
-                        unidades_traspaso = min(limite_inventario_ajustado, unidades_necesarias)
-                    else:
-                        break
-                    if unidades_traspaso > 0:
-                        traspasos.append((s_origen, sucursal_destino, producto, unidades_traspaso, costo_unitario))
-                        inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'] -= unidades_traspaso
-                        unidades_necesarias -= unidades_traspaso
-                        unidades_totales_traspasadas += unidades_traspaso
-                        if clasificacion == 'C':
-                            limite_inventario_ajustado -= unidades_traspaso
-                    else:
-                        break
+                    unidades_traspaso = min(inventario_ajustado, unidades_necesarias)
+                    traspasos.append((s_origen, sucursal_destino, producto, unidades_traspaso, costo_unitario))
+                    inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'] -= unidades_traspaso
+                    unidades_necesarias -= unidades_traspaso
+                    unidades_totales_traspasadas += unidades_traspaso
                 else:
                     break
+
                 if unidades_traspaso == 0:
                     break
 
