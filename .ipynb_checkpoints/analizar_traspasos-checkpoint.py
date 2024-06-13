@@ -50,10 +50,10 @@ def analizar_traspasos():
     def ajustar_inventario(row):
         clasificacion = row['clasificacion']
         if clasificacion in ['A', 'B']:
-            row['excedente_ajustado'] = row['excedente'] * max_exced_permitido_AB
+            row['excedente_ajustado'] = int(row['excedente'] * max_exced_permitido_AB)
             row['inventario_ajustado'] = 0
         elif clasificacion == 'C':
-            row['inventario_ajustado'] = (row['inventario_disponible'] - row['excedente']) * max_inv_disp_C + row['excedente']
+            row['inventario_ajustado'] = int((row['inventario_disponible'] - row['excedente']) * max_inv_disp_C + row['excedente'])
         return row
 
     inventario_df['excedente_ajustado'] = inventario_df['excedente']
