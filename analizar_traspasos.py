@@ -51,6 +51,7 @@ def analizar_traspasos():
         clasificacion = row['clasificacion']
         if clasificacion in ['A', 'B']:
             row['excedente_ajustado'] = row['excedente'] * max_exced_permitido_AB
+            row['inventario_ajustado'] = 0
         elif clasificacion == 'C':
             row['inventario_ajustado'] = (row['inventario_disponible'] - row['excedente']) * max_inv_disp_C + row['excedente']
         return row
