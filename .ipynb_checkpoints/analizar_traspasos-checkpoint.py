@@ -95,6 +95,11 @@ def analizar_traspasos():
         # Calcular puntuación
         puntuacion = (w_P * P_norm) + (w_C * C_norm) + (w_I * I_norm) + (w_E * E_norm)
         return puntuacion, costo_unitario, clasificacion
+    
+    def registrar_log(sht, log_entry):
+        log_range = sht.range("logs")
+        last_row = log_range.end('down').row + 1
+        sht.range(f"{log_range.address.split('$')[1]}{last_row}").value = log_entry
 
     def satisfacer_deficit(deficit_row):
    
@@ -134,12 +139,16 @@ def analizar_traspasos():
                     inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'] -= unidades_traspaso
                     unidades_necesarias -= unidades_traspaso
                     unidades_totales_traspasadas += unidades_traspaso
+                    registrar_log(sht, [s_origen, sucursal_destino, producto, unidades_traspaso, "Excedente"])
+
                 elif inventario_ajustado > 0:
                     unidades_traspaso = min(inventario_ajustado, unidades_necesarias)
                     traspasos.append((s_origen, sucursal_destino, producto, unidades_traspaso, costo_unitario))
                     inventario_df.loc[(inventario_df['sucursal'] == s_origen) & (inventario_df['producto'] == producto), 'inventario_ajustado'] -= unidades_traspaso
                     unidades_necesarias -= unidades_traspaso
                     unidades_totales_traspasadas += unidades_traspaso
+                    registrar_log(sht, [s_origen, sucursal_destino, producto, unidades_traspaso, "Inventario Ajustado"])
+
                 else:
                     break
 
