@@ -97,7 +97,7 @@ def analizar_traspasos():
         return puntuacion, costo_unitario, clasificacion
     
     def registrar_log(sht, log_entry):
-        log_range = sht.range("logs")
+        log_range = sht.range("logs_")
         last_row = log_range.end('down').row + 1
         sht.range(f"{log_range.address.split('$')[1]}{last_row}").value = log_entry
 
