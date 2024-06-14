@@ -16,6 +16,9 @@ def analizar_traspasos():
     # restablecer status
     sht.range("status").value = 'Procesando...'
 
+    # Limpiar el contenido de la región actual del rango "logs" para guardar solo nuevos logs
+    sht.range("logs_").current_region.clear_contents()
+    
     # Convierte los rangos de las tablas de Excel a DataFrames de pandas
     def table_to_df(table):
         table_range = table.data_body_range
@@ -95,7 +98,7 @@ def analizar_traspasos():
         # Calcular puntuación
         puntuacion = (w_P * P_norm) + (w_C * C_norm) + (w_I * I_norm) + (w_E * E_norm)
         return puntuacion, costo_unitario, clasificacion
-    
+        
     def registrar_log(sht, log_entry):
         log_range = sht.range("logs_")
         start_cell = log_range.offset(100000, 0).end('up')
