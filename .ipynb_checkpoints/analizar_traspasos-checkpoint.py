@@ -98,8 +98,9 @@ def analizar_traspasos():
     
     def registrar_log(sht, log_entry):
         log_range = sht.range("logs_")
-        last_row = log_range.end('down').row + 1
-        sht.range(f"{log_range.address.split('$')[1]}{last_row}").value = log_entry
+        start_cell = log_range.offset(100000, 0).end('up')
+        next_row = start_cell.row + 1
+        sht.range(f"{log_range.address.split('$')[1]}{next_row}").value = log_entry
 
     def satisfacer_deficit(deficit_row):
    
