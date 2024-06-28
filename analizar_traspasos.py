@@ -1,7 +1,7 @@
 import xlwings as xw
 import pandas as pd
-import numpy as np
-import os
+# import numpy as np
+# import os
 
 def analizar_traspasos():
 
@@ -203,7 +203,7 @@ def analizar_traspasos():
     # Función para escribir DataFrame en una tabla existente
     def df_to_table(sheet, table_name, df):
         table = sheet.tables[table_name]
-        table_range = table.range
+        # table_range = table.range
         header_range = table.header_row_range
 
         # Eliminar filas de la tabla
