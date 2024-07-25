@@ -1,13 +1,19 @@
 import xlwings as xw
 import pandas as pd
 # import numpy as np
-# import os
+import os
 
 def analizar_traspasos():
 
-    # Construir la ruta completa al archivo de Excel
-    file_path = r'C:\Users\diego.salinas\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\Documents\TI\Proyectos_BI\Almacen e inventarios\Traspasos\escenarios_traspasos.xlsm'
-                 
+    # # Construir la ruta completa al archivo de Excel
+    # file_path = r'C:\Users\diego.salinas\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\Documents\TI\Proyectos_BI\Almacen e inventarios\Traspasos\escenarios_traspasos.xlsm'
+    
+    # Obtener el directorio del usuario actual
+    user_dir = os.path.expanduser('~')
+
+    # Construir la ruta completa al archivo
+    file_path = os.path.join(user_dir, 'OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV', 'Documents', 'Traspasos', 'escenarios_traspasos.xlsm')
+    
     # Lee el libro de Excel
     bk = xw.Book(file_path)
     # Selecciona la hoja de trabajo

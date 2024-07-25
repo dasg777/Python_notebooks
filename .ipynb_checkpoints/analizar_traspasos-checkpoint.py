@@ -1,13 +1,19 @@
 import xlwings as xw
 import pandas as pd
-import numpy as np
+# import numpy as np
 import os
 
 def analizar_traspasos():
 
-    # Construir la ruta completa al archivo de Excel
-    file_path = r'C:\Users\diego.salinas\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\Documents\TI\Proyectos_BI\Almacen e inventarios\Traspasos\escenarios_traspasos.xlsm'
-                 
+    # # Construir la ruta completa al archivo de Excel
+    # file_path = r'C:\Users\diego.salinas\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\Documents\TI\Proyectos_BI\Almacen e inventarios\Traspasos\escenarios_traspasos.xlsm'
+    
+    # Obtener el directorio del usuario actual
+    user_dir = os.path.expanduser('~')
+
+    # Construir la ruta completa al archivo
+    file_path = os.path.join(user_dir, 'OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV', 'Documents', 'Traspasos', 'escenarios_traspasos.xlsm')
+    
     # Lee el libro de Excel
     bk = xw.Book(file_path)
     # Selecciona la hoja de trabajo
@@ -203,7 +209,7 @@ def analizar_traspasos():
     # Función para escribir DataFrame en una tabla existente
     def df_to_table(sheet, table_name, df):
         table = sheet.tables[table_name]
-        table_range = table.range
+        # table_range = table.range
         header_range = table.header_row_range
 
         # Eliminar filas de la tabla
