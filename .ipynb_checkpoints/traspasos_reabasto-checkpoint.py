@@ -5,14 +5,11 @@ import os
 
 def analizar_traspasos():
 
-    # # Construir la ruta completa al archivo de Excel
-    # file_path = r'C:\Users\diego.salinas\OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV\Documents\TI\Proyectos_BI\Almacen e inventarios\Traspasos\escenarios_traspasos.xlsm'
-    
     # Obtener el directorio del usuario actual
     user_dir = os.path.expanduser('~')
 
     # Construir la ruta completa al archivo
-    file_path = os.path.join(user_dir, 'OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV', 'Documents', 'Traspasos', 'escenarios_traspasos.xlsm')
+    file_path = os.path.join(user_dir, 'OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV', 'Documents', 'Traspasos', 'traspasos_reabasto.xlsm')
     
     # Lee el libro de Excel
     bk = xw.Book(file_path)
@@ -232,5 +229,5 @@ def analizar_traspasos():
     sht.range("status").value = 'Proceso terminado'
 
 if __name__ == "__main__":
-    xw.Book("escenarios_traspasos.xlsm").set_mock_caller()
+    xw.Book("traspasos_reabasto.xlsm").set_mock_caller()
     analizar_traspasos()

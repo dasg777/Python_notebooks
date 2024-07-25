@@ -1,9 +1,9 @@
 import requests
 import os
 
-def download_and_run_github_script_analizar_traspasos():
+def download_and_run_github_script_traspasos_baja_rotacion():
       # URL del archivo en GitHub
-    github_url = "https://raw.githubusercontent.com/dasg777/Python_notebooks/main/traspasos_reabasto.py"
+    github_url = "https://raw.githubusercontent.com/dasg777/Python_notebooks/main/traspasos_baja_rotacion.py"
     
     # Ruta local donde se guardará el archivo descargado
     local_path = r"C:\Temp\archivo.py"
@@ -27,4 +27,4 @@ def download_and_run_github_script_analizar_traspasos():
             print("Archivo eliminado después de la ejecución.")
 
 if __name__ == "__main__":
-    download_and_run_github_script_analizar_traspasos()
+    download_and_run_github_script_traspasos_baja_rotacion()
