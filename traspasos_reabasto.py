@@ -9,7 +9,7 @@ def analizar_traspasos():
     user_dir = os.path.expanduser('~')
 
     # Construir la ruta completa al archivo
-    file_path = os.path.join(user_dir, 'OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV', 'Documents', 'Traspasos', 'traspasos_reabasto.xlsm')
+    file_path = os.path.join(user_dir, 'OneDrive - RODAMIENTOS Y ACCESORIOS SA DE CV', 'Documentos', 'Traspasos', 'traspasos_reabasto.xlsm')
     
     # Lee el libro de Excel
     bk = xw.Book(file_path)
